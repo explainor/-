@@ -102,17 +102,17 @@ void newplayer()
 
 void writetofile()
 {
-    FILE* infile = fopen("C:\\Users\\小舒同学\\source\\repos\\data.txt", "wb");
+    FILE* infile = fopen("C:\\data.txt", "w");
     check(infile);
-    fwrite(players, sizeof(players[maxplayer]), 1, infile);
+    fwrite(&players, sizeof(players[maxplayer]), 1, infile);
     fclose(infile);
 }
 
 void readfromfile()
 {
-    FILE*outfile=fopen("C:\\Users\\小舒同学\\source\\repos\\data.txt", "rb");
+    FILE*outfile=fopen("C:\\data.txt", "r");
     check(outfile);
-    fread(players, sizeof(players[maxplayer]), 1, outfile);
+    fread(&players[maxplayer], sizeof(players[maxplayer]), 1, outfile);
     fclose(outfile);
 }
 
@@ -147,7 +147,7 @@ void genr()
 
     // Generate a random integer in the range from 1 to 100
     r1 = std::rand() % 20 + 10;
-    r2 = std::rand() % 50 + 1;
+    r2 = std::rand() % 50 + 10;
 
     // Print the generated random integer
     printf("X1=%d，X2=%d,X1*X2=?\n", r1, r2);
@@ -177,57 +177,57 @@ int getanswer()
     }
 }
 
-    int compare()
+int compare()
+{
+    if (result == answer)
     {
-        if (result == answer)
-        {
-            score++;
-            printf("答案正确！");
-            printf("剩余生命：%d     总分:%d\n", lives, score);
-        }
-        else
-        {
-            lives--;
-            printf("再接再厉！");
-            printf("剩余生命：%d     总分:%d\n", lives, score);
-        }
-        return score;
+        score++;
+        printf("答案正确！");
+        printf("剩余生命：%d     总分:%d\n", lives, score);
     }
-
-    void mode1()
+    else
     {
+        lives--;
+        printf("再接再厉！");
+        printf("剩余生命：%d     总分:%d\n", lives, score);
+    }
+    return score;
+}
+
+void mode1()
+{
+    system("cls");
+    printf("剩余生命：%d     总分:%d\n", lives, score);
+    for (int i = 0; lives > 0; i++)
+    {
+        genr();
+        result = r1 * r2;
+        answer = getanswer();
+        getchar();
+        compare();
+        Sleep(1000);
         system("cls");
         printf("剩余生命：%d     总分:%d\n", lives, score);
-        for (int i = 0; lives > 0; i++)
-        {
-            genr();
-            result = r1 * r2;
-            answer = getanswer();
-            getchar();
-            compare();
-            Sleep(1000);
-            system("cls");
-            printf("剩余生命：%d     总分:%d\n", lives, score);
-        }
-        printf("游戏结束！   总分:%d\n", score);
-        Sleep(1000);
-
     }
+    printf("游戏结束！   总分:%d\n", score);
+    Sleep(1000);
 
-    void login()
+}
+
+void login()
+{
+    for (int i = 0; players[i].name[0] != '\0'&&i<=maxplayer; i++)
     {
-        for (int i = 0; players[i].name[0] != '\0'; i++)
-        {
-            printf("%d.%s\n", i + 1, players[i].name);
-        }
-        printf("请输入您要登录的账号序号\n");
-        int input;
-        scanf("%d", &input);
-        if (input > maxplayer)
-        {
-            printf("输入错误捏,2秒后返回主界面\n");
-        }
-        else
+        printf("%d.%s\n", i + 1, players[i].name);
+    }
+    printf("请输入您要登录的账号序号\n");
+    int input;
+    scanf("%d", &input);
+    if (input > maxplayer)
+    {
+        printf("输入错误捏,2秒后返回主界面\n");
+    }
+    else
     {
         for (int i = 0; i <= maxplayer; i++)
         {
@@ -243,7 +243,7 @@ int getanswer()
                         mode1();
                         for (int c = 0; c <= 5; c++)
                         {
-                            int done=0;
+                            int done = 0;
                             if (players[i].record.mode1score[c] < score)
                             {
                                 players[i].record.mode1score[c] = score;
@@ -256,13 +256,13 @@ int getanswer()
                         }
                         printf("得分已录入\n1.继续游戏\n2.返回主界面\n");
                         m = _getch();
-                            if(m!='1')
-                            {
-                                lives = 3;
-                                score = 0;
-                                break;
-                            }
-                           
+                        if (m != '1')
+                        {
+                            lives = 3;
+                            score = 0;
+                            break;
+                        }
+
                         lives = 3;
                         score = 0;
                     }
@@ -277,7 +277,8 @@ int getanswer()
     }
     return;
 }
-        void prtdata()
+
+void prtdata()
         { 
             for (int i=0; i <= maxplayer; i++)
             {    
