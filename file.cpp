@@ -27,7 +27,6 @@ struct person {
     }record;
 };
 person players[maxplayer];
-
 void check(void* p)
 {
     if (p == NULL)
@@ -36,7 +35,23 @@ void check(void* p)
         return;
     }
 }
-
+//检查是否为野指针
+void writetofile()
+{
+    FILE* infile = fopen("data.txt", "w");
+    check(infile);
+    fwrite(&players, sizeof(players[maxplayer]), 1, infile);
+    fclose(infile);
+}
+//结束程序前内存写入文件
+void readfromfile()
+{
+    FILE*outfile=fopen("data.txt", "r");
+    check(outfile);
+    fread(&players[maxplayer], sizeof(players[maxplayer]), 1, outfile);
+    fclose(outfile);
+}
+//开始程序后文件写入内存
 void newname(int i)
 {
     char tempname[20];
@@ -46,7 +61,7 @@ void newname(int i)
     strncpy(players[i].name, tempname, sizeof(players[i].name) - 1);
     players[i].name[sizeof(players[i].name)] = '\0';
 }
-
+//设置新用户名
 void passwordset(int i)
 {
     char code1[21];
@@ -76,7 +91,7 @@ void passwordset(int i)
         system("pause");
     }
 }
-
+//新用户设置密码
 void newplayer()
 {
     static int i=0;
@@ -99,23 +114,7 @@ void newplayer()
         }
 
 }
-
-void writetofile()
-{
-    FILE* infile = fopen("C:\\data.txt", "w");
-    check(infile);
-    fwrite(&players, sizeof(players[maxplayer]), 1, infile);
-    fclose(infile);
-}
-
-void readfromfile()
-{
-    FILE*outfile=fopen("C:\\data.txt", "r");
-    check(outfile);
-    fread(&players[maxplayer], sizeof(players[maxplayer]), 1, outfile);
-    fclose(outfile);
-}
-
+//新用户注册
 void passwordcheck(int num)
 {
         printf("请输入密码\n");
@@ -139,7 +138,7 @@ void passwordcheck(int num)
             }
         }
     }
-
+//登录检查密码
 void genr()
 {
     // Seed the random number generator with the current time
@@ -153,7 +152,7 @@ void genr()
     printf("X1=%d，X2=%d,X1*X2=?\n", r1, r2);
     result = r1 * r2;
 }
-
+//随机数产生
 int getanswer()
 {
     int userInput = 0;
@@ -176,7 +175,7 @@ int getanswer()
         return userInput;
     }
 }
-
+//读取玩家回答
 int compare()
 {
     if (result == answer)
@@ -193,9 +192,12 @@ int compare()
     }
     return score;
 }
-
+//结果判定
 void mode1()
 {
+    system("cls");
+    printf("游戏将在三秒后开始，请做好准备\n");
+    Sleep(3000);
     system("cls");
     printf("剩余生命：%d     总分:%d\n", lives, score);
     for (int i = 0; lives > 0; i++)
@@ -213,7 +215,7 @@ void mode1()
     Sleep(1000);
 
 }
-
+//模式一
 void login()
 {
     for (int i = 0; players[i].name[0] != '\0'&&i<=maxplayer; i++)
@@ -277,7 +279,7 @@ void login()
     }
     return;
 }
-
+//用户登录及游戏
 void prtdata()
         { 
             for (int i=0; i <= maxplayer; i++)
@@ -290,3 +292,4 @@ void prtdata()
                 printf("\n");
             }
         }
+//打印数据

@@ -1,7 +1,4 @@
 #pragma once
-//符号常量
-
-// 函数声明
 void mainmenu();
 void login();
 void prtdata();
@@ -17,6 +14,3 @@ int getanswer();
 void readfromfile();
 void writetofile();
 
-// 类型定义
-
-//结构声明
